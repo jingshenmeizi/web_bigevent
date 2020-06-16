@@ -1,7 +1,6 @@
 $(function() {
     // 点击去注册
     $("#link_reg").on("click", function() {
-
         $(".reg-box").show();
         $(".login-box").hide();
     });
@@ -27,7 +26,6 @@ $(function() {
         }
     });
     // 注册功能
-
     $("#form_reg").on("submit", function(e) {
         e.preventDefault();
         var data = {
@@ -40,7 +38,7 @@ $(function() {
             }
             layer.msg("注册成功，请登录！");
             $("#link_login").click();
-        })
+        });
     });
     // 登录
     $("#form_login").submit(function(e) {
@@ -56,7 +54,7 @@ $(function() {
                 // 将token值存起来
                 localStorage.setItem('token', res.token);
                 layer.msg("登录成功");
-                location.href = "/index.html"
+                location.href = "/index.html";
             }
         })
     })
