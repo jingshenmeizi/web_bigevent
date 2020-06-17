@@ -9,5 +9,13 @@ $(function() {
                 Authorization: localStorage.getItem('token')
             }
         }
+        // 无论ajax请求是成功失败都会调用complete
+        option.complete = function(res) {
+            console.log(res);
+            if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
+                localStorage.removeItem('token');
+                location.href = '/login.html';
+            }
+        }
     })
 })

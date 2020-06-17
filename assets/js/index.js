@@ -1,6 +1,24 @@
 $(function() {
+    // 获取用户信息
     getUserInfo();
+    // 退出登录
+    signOut();
 })
+var layer = layui.layer;
+
+function signOut() {
+    $("#logout").on("click", function() {
+        // 弹出确认退出提升框
+        layer.confirm('确定退出登录?', { icon: 3, title: '提示' }, function(index) {
+            //清空token
+            localStorage.removeItem('token');
+            //跳转到登录页面
+            location.href = '/login.html';
+            //关闭弹框
+            layer.close(index);
+        });
+    })
+}
 
 function getUserInfo() {
     $.ajax({
@@ -12,11 +30,12 @@ function getUserInfo() {
         // },
         success: function(res) {
             if (res.status !== 0) {
-                return layui.layer.msg("获取用户信息失败");
+                return layer.msg("获取用户信息失败");
             }
             // 渲染头像和名称
             renderHeadImg(res.data);
         }
+
     })
 }
 
