@@ -40,8 +40,7 @@ function getUserInfo() {
 }
 
 function renderHeadImg(data) {
-    var name = data.resnickname || data.username;
-
+    var name = data.nickname || data.username;
     $(".welcome").html('欢迎&nbsp&nbsp' + name);
     // 头像
     if (data.user_pic !== null && data.user_pic !== "") {
