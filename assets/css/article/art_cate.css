@@ -15,7 +15,8 @@ body {
     align-items: center;
 }
 
-#form-addCate {
+#form-addCate,
+#form-editCate {
     margin-top: 20px;
     margin-right: 30px;
 }
