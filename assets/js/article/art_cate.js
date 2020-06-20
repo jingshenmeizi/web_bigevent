@@ -47,7 +47,7 @@ $(function() {
     });
     // 给编辑按钮绑定事件
     var editIndex = null;
-    $("#cateItems").on('click', '#btnEdit', function() {
+    $("#cateItems").on('click', '.btnEdit', function() {
         editIndex = layer.open({
             // 页面层
             type: 1,
@@ -87,13 +87,9 @@ $(function() {
         })
     });
     // 删除类别
-    $("#cateItems").on('click', '#btnDel', function() {
+    $("#cateItems").on('click', '.btnDel', function() {
         var id = $(this).attr('data-id');
         layer.confirm('确定要删除吗?', { icon: 3, title: '提示' }, function(index) {
-            //do something
-
-            console.log(id);
-
             // 发起请求
             $.ajax({
                 method: "GET",

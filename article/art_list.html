@@ -13,25 +13,16 @@
     <div class="layui-card">
         <div class="layui-card-header">文章列表</div>
         <div class="layui-card-body">
-            <form class="layui-form" action="">
+            <form class="layui-form" id="form_select">
                 <div class="layui-form-item layui-inline">
-                    <select name="cate_name" lay-verify="required">
-                        <option value="">所有分类</option>
-                        <option value="0">北京</option>
-                        <option value="1">上海</option>
-                        <option value="2">广州</option>
-                        <option value="3">深圳</option>
-                        <option value="4">杭州</option>
-                      </select>
+                    <select name="cate_id">
+                    </select>
                 </div>
                 <div class="layui-form-item layui-inline">
-                    <select name="state" lay-verify="required">
+                    <select name="state">
                         <option value="">所有状态</option>
-                        <option value="0">北京</option>
-                        <option value="1">上海</option>
-                        <option value="2">广州</option>
-                        <option value="3">深圳</option>
-                        <option value="4">杭州</option>
+                        <option value="已发布">已发布</option>
+                        <option value="草稿">草稿</option>
                       </select>
                 </div>
                 <div class="layui-form-item layui-inline">
@@ -59,17 +50,28 @@
 
                 </tbody>
             </table>
+            <!-- 分页 -->
+            <div id="pageBox"></div>
         </div>
     </div>
+    <!-- 编辑页面 -->
+
+    <script type="text/html" id="all_cate">
+        <option value="">所有分类</option>
+        {{each data}}
+        <option value="{{$value.Id}}">{{$value.name}}</option>
+        {{/each}}
+    </script>
     <script type="text/html" id="art_table">
         {{each data}}
         <tr>
             <td>{{$value.title}}</td>
             <td>{{$value.cate_name}}</td>
-            <td>{{$value.pub_date}}</td>
+            <td>{{$value.pub_date | timeFormat}}</td>
             <td>{{$value.state}}</td>
-            <td> <button data-id="{{$value.Id}}" id="btnEdit" type="button" class="layui-btn layui-btn-xs">编辑</button>
-                <button data-id="{{$value.Id}}" id="btnDel" type="button" class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
+            <td>
+                <button data-id="{{$value.Id}}" type="button" class="layui-btn layui-btn-xs btn-edit">编辑</button>
+                <button data-id="{{$value.Id}}" type="button" class="layui-btn layui-btn-danger layui-btn-xs btn-del">删除</button>
             </td>
         </tr>
         {{/each}}

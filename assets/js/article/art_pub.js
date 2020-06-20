@@ -1,7 +1,7 @@
 $(function() {
     var layer = layui.layer;
     var form = layui.form;
-
+    var isEdit = false;
     initSelectCate();
     // 初始化富文本编辑器
     initEditor()
@@ -28,6 +28,29 @@ $(function() {
             .attr('src', newImgURL) // 重新设置图片路径
             .cropper(options) // 重新初始化裁剪区域
     });
+
+    var editData = null;
+    //如果是编辑跳过来的，则需要渲染数据
+    if (localStorage.getItem("editData")) {
+        isEdit = true;
+        editData = JSON.parse(localStorage.getItem("editData"));
+        $("[name=title]").val(editData.title);
+        // 根据类别id获得类型名称
+        $.ajax({
+            method: "GET",
+            url: "/my/article/cates/" + editData.cate_id,
+            success: function(res) {
+                console.log(res);
+                if (res.status === 0) {
+                    $("[name=cate_id]").val(res.data.name);
+                    form.render()
+                }
+            }
+        })
+        $("[name=content]").val(editData.content);
+        localStorage.removeItem("editData");
+    }
+
     // 准备数据
     var state = "已发布";
     $("#saveBtn").on("click", function() {
@@ -50,21 +73,45 @@ $(function() {
     })
 
     function pubArt(fd) {
-        $.ajax({
-            method: "POST",
-            url: "/my/article/add",
-            data: fd,
-            //如果向服务器提交的是FormData格式的数据，必须添加以下两个配置项
-            contentType: false,
-            processData: false,
-            success: function(res) {
-                if (res.status !== 0) {
-                    layer.msg("发布文章失败！")
+        // 是否是编辑
+        if (isEdit) {
+            fd.append("Id", editData.Id)
+            fd.forEach(function(e, i) {
+                console.log(i, e);
+            })
+            $.ajax({
+                method: "POST",
+                url: "/my/article/edit",
+                data: fd,
+                //如果向服务器提交的是FormData格式的数据，必须添加以下两个配置项
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    if (res.status !== 0) {
+                        layer.msg("修改文章失败！")
+                    }
+                    layer.msg("修改文章成功！");
+                    location.href = "/article/art_list.html";
                 }
-                layer.msg("发布文章失败！");
-                location.href = "/article/art_list.html";
-            }
-        })
+            })
+        } else {
+            $.ajax({
+                method: "POST",
+                url: "/my/article/add",
+                data: fd,
+                //如果向服务器提交的是FormData格式的数据，必须添加以下两个配置项
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    if (res.status !== 0) {
+                        layer.msg("发布文章失败！")
+                    }
+                    layer.msg("发布文章失败！");
+                    location.href = "/article/art_list.html";
+                }
+            })
+        }
+
     }
 
     function initSelectCate() {
