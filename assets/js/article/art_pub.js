@@ -28,27 +28,23 @@ $(function() {
             .attr('src', newImgURL) // 重新设置图片路径
             .cropper(options) // 重新初始化裁剪区域
     });
-
-    var editData = null;
     //如果是编辑跳过来的，则需要渲染数据
-    if (localStorage.getItem("editData")) {
-        isEdit = true;
-        editData = JSON.parse(localStorage.getItem("editData"));
-        $("[name=title]").val(editData.title);
-        // 根据类别id获得类型名称
+    var searchData = new URLSearchParams(location.search);
+    var editId = searchData.get("id");
+    // 编辑页面跳转过来的
+    if (editId) {
+        // 根据id获取文章详情
         $.ajax({
             method: "GET",
-            url: "/my/article/cates/" + editData.cate_id,
+            url: "/my/article/" + editId,
             success: function(res) {
-                console.log(res);
-                if (res.status === 0) {
-                    $("[name=cate_id]").val(res.data.name);
-                    form.render()
+                if (res.status !== 0) {
+                    layer.msg("获取原文章信息失败");
                 }
+                // 将信息渲染到页面上
+                form.val("form_pub", res.data)
             }
         })
-        $("[name=content]").val(editData.content);
-        localStorage.removeItem("editData");
     }
 
     // 准备数据
@@ -74,8 +70,8 @@ $(function() {
 
     function pubArt(fd) {
         // 是否是编辑
-        if (isEdit) {
-            fd.append("Id", editData.Id)
+        if (editId) {
+            fd.append("Id", editId)
             fd.forEach(function(e, i) {
                 console.log(i, e);
             })

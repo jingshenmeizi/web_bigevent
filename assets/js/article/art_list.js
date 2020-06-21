@@ -123,20 +123,9 @@ $(function() {
 
     $("#art_lists").on('click', '.btn-edit', function() {
         var id = $(this).attr('data-id');
-        $.ajax({
-            method: "GET",
-            url: "/my/article/" + id,
-            success: function(res) {
-                var editJson = JSON.stringify(res.data);
-                if (res.status !== 0) {
-                    layer.msg("获取文章信息失败！")
-                }
-                // 跳转html
-                location.href = "/article/art_pub.html";
-                // 传值
-                window.localStorage.setItem('editData', editJson)
-            }
-        });
+        console.log(id);
 
+        // 跳转html
+        location.href = "/article/art_pub.html?id=" + id;
     })
 })
